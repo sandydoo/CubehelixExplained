@@ -18,8 +18,10 @@ Why do this in the first place?
 
 ## Creating a palette
 
-Describe algorithm.
-Show the helix in 3d space and the resulting palettes.
+- Describe algorithm.
+- Show the helix in 3d space and the resulting palettes.
+- Describe plane, using vectors from original paper.
+- Show how d3’s implementation is brighter because of the 2x adjustment.
 
 
 ## Do we need the helix?
@@ -51,14 +53,14 @@ function cubehelixConvert(o) {
 
 To really understand what’s going on, we’re going to derive the solution from scratch. We’ll need a tiny bit of linear algebra, and the rest will be some basic geometry and algebra.
 
-Convert RGB to HSL.
+- Convert RGB to HSL.
 
 
 ### Lightness
 
-Lightness — overall brightness of the colors.
-The RGB cube, the diagonal, colorless, overall brightness.
-R, G, and B are three orthogonal vectors. The normal vector to the three is the diagonal.
+- Lightness — overall brightness of the colors.
+- The RGB cube, the diagonal, colorless, overall brightness.
+- R, G, and B are three orthogonal vectors. The normal vector to the three is the diagonal.
 
 Cross product of two vectors
 
@@ -84,7 +86,7 @@ Here’s where things seem a bit confusing at first. At first glance, \texttt{s}
 
 We’ve got several clues. The saturation is computed from the square root of the sum of squares of \texttt{bl} and \texttt{k}. This is the Pythagorean theorem! And the hue — that’s the angle from the positive $x$ axis. So \texttt{bl} and \texttt{k} are the $x$ and $y$ values in a Euclidean plane, respectively. What is this plane though?
 
-Describe projection.
+- Describe projection.
 
 Let’s recall the original RGB transformation.
 
@@ -152,7 +154,7 @@ s &= \frac{ \sqrt{ \hat{x}^2 + \hat{y}^2 } }{ E \tilde{\alpha} }
 
 Lastly, we can compute the hue using the two-argument inverse tangent function, remembering to convert from radians to degrees,
 
-EXPLAIN ATAN2
+- EXPLAIN ATAN2
 
 \begin{align}
 h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ \ang{180} }{ \pi }
