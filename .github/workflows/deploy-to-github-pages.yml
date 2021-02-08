@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  create-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout
+    - uses: actions/checkout@v2
+
+    - run: mkdir rendered
+
+    - name: Create PDF with pandoc
+      uses: docker://pandoc/latex
+      with:
+        args: |
+          --output=rendered/CubehelixExplained.pdf
+          CubehelixExplained.md
+
+    - name: Deploy to GitHub Pages
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v2
+      with:
+        target_branch: gh-pages
+        build_dir: rendered
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
