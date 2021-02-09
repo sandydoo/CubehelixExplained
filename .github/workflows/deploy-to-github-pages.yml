@@ -16,11 +16,7 @@ jobs:
     - run: mkdir rendered
 
     - name: Create PDF with pandoc
-      uses: docker://pandoc/latex
-      with:
-        args: >-
-          --output=rendered/CubehelixExplained.pdf
-          CubehelixExplained.md
+      uses: ./
 
     - name: Deploy to GitHub Pages
       if: success()

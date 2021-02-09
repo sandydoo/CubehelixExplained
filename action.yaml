@@ -1,0 +1,5 @@
+name: 'Create PDF with pandoc'
+description: 'Creates a PDF using pandoc and latex'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
