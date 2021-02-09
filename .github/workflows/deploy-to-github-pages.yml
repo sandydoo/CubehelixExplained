@@ -18,7 +18,7 @@ jobs:
     - name: Create PDF with pandoc
       uses: docker://pandoc/latex
       with:
-        args: |
+        args: >-
           --output=rendered/CubehelixExplained.pdf
           CubehelixExplained.md
 
