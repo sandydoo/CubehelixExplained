@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-pandoc CubehelixExplained.md -o rendered/CubehelixExplained.pdf
-
+pandoc --pdf-engine xelatex --output rendered/CubehelixExplained.pdf CubehelixExplained.md

@@ -7,4 +7,4 @@ RUN tlmgr install cancel \
                   siunitx \
                   draftwatermark
 
-ENTRYPOINT ["render.sh"]
+ENTRYPOINT ["/data/render.sh"]
