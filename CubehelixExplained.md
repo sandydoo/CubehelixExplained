@@ -10,6 +10,11 @@ header-includes:
 ---
 
 
+```{=html}
+<h1 style="color: red; text-align: center;">This is a draft.</h1>
+```
+
+
 ## Motivation
 
 What is it?

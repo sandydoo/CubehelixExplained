@@ -1,5 +1,5 @@
-name: 'Create PDF with pandoc'
-description: 'Creates a PDF using pandoc and latex'
+name: 'Create PDF and HTML'
+description: 'Creates PDF and HTML versions using pandoc and latex'
 runs:
   using: 'docker'
   image: 'Dockerfile'

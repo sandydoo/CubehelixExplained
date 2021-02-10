@@ -15,7 +15,7 @@ jobs:
 
     - run: mkdir rendered
 
-    - name: Create PDF with pandoc
+    - name: Create PDF and HTML with pandoc
       uses: ./
 
     - name: Deploy to GitHub Pages
