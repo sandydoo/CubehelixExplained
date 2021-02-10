@@ -1,8 +1,10 @@
 # Cubehelix Explained
 
-A WIP explanation of the [cubehelix color scheme][cubehelix_homepage] and its [color space extension][cubehelix_d3].
+A very rough WIP explanation of the [cubehelix color scheme][cubehelix_homepage] and its [color space extension][cubehelix_d3].
 
-[**Read the latest draft →**](https://github.com/sandydoo/CubehelixExplained/blob/gh-pages/CubehelixExplained.pdf)
+[**Read the latest draft →**](https://sandydoo.github.io/CubehelixExplained/)
+
+[**Download as PDF ↓**](https://github.com/sandydoo/CubehelixExplained/blob/gh-pages/CubehelixExplained.pdf)
 
 
 ## License
