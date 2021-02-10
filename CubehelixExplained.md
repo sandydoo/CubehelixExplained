@@ -5,7 +5,6 @@ lang: en-GB
 toc: true
 header-includes:
   - \usepackage{cancel}
-    \usepackage{siunitx}
     \usepackage{draftwatermark}
     \SetWatermarkLightness{0.95}
 ---
@@ -158,18 +157,18 @@ Lastly, we can compute the hue using the two-argument inverse tangent function, 
 - EXPLAIN ATAN2
 
 \begin{align}
-h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ \ang{180} }{ \pi }
+h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180° }{ \pi }
 \end{align}
 
 
 ### Spinning the hue
 
-Once last thing! Remember how our $x$ value \eqref{x} was calculated solely from the blue component of our color? Well, that means that we’ve rotated our coordinate space. Typical hue values are set to $\ang{0}$ at red, $\ang{120}$ at green, and $\ang{240}$ at blue. At $\ang{0}$, our hue is actually blue. So we’ve rotated everything by $\ang{120}$ counter-clockwise, adding $\ang{120}$ to our hue value.
+Once last thing! Remember how our $x$ value \eqref{x} was calculated solely from the blue component of our color? Well, that means that we’ve rotated our coordinate space. Typical hue values are set to $0°$ at red, $120°$ at green, and $240°$ at blue. At $0°$, our hue is actually blue. So we’ve rotated everything by $120°$ counter-clockwise, adding $120°$ to our hue value.
 
-Luckily, there’s a simple fix! We’ll just subtract $\ang{120}$ from our final hue, and then, when converting back to RGB, make sure to add it back.
+Luckily, there’s a simple fix! We’ll just subtract $120°$ from our final hue, and then, when converting back to RGB, make sure to add it back.
 
 \begin{align}
-h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180 }{ \pi } - \ang{120}
+h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180 }{ \pi } - 120°
 \end{align}
 
 
