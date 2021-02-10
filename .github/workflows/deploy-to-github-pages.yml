@@ -8,8 +8,9 @@ jobs:
   create-pdf:
     runs-on: ubuntu-latest
 
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Checkout
       uses: actions/checkout@v2
 
