@@ -4,7 +4,7 @@ A very rough WIP explanation of the [cubehelix color scheme][cubehelix_homepage]
 
 [**Read the latest draft →**](https://sandydoo.github.io/CubehelixExplained/)
 
-[**Download as PDF ↓**](https://github.com/sandydoo/CubehelixExplained/blob/gh-pages/CubehelixExplained.pdf)
+[**Download as PDF ↓**](https://sandydoo.github.io/CubehelixExplained/CubehelixExplained.pdf)
 
 
 ## License
