@@ -1,6 +1,7 @@
 ---
 title: Cubehelix Explained
 author: Sander Melnikov <hey@sandydoo.me>
+lang: en-GB
 toc: true
 header-includes:
   - \usepackage{cancel}
