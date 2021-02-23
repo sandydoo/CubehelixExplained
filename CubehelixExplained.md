@@ -15,11 +15,11 @@ header-includes:
 ```
 
 
+<!--
 ## Motivation
 
 What is it?
 Why do this in the first place?
-
 
 ## Creating a palette
 
@@ -27,18 +27,31 @@ Why do this in the first place?
 - Show the helix in 3d space and the resulting palettes.
 - Describe plane, using vectors from original paper.
 - Show how d3’s implementation is brighter because of the 2x adjustment.
+-->
+
+
+## Introduction
+
+Cubehelix is a method of generating palettes of colours with a very important property — a monotonically, or constantly increasing perceived brightness. The main use-case for such palettes is in data visualisation, where it’s common to represent ranges of numbers as ordered ranges of colours. But creating colourful palettes — not just greyscale — that actually look ordered turns out to be more difficult than simply increasing the overall lightness. I’ll let Dave A. Green, the original author of the cubehelix scheme, explain the issue in detail.
+
+“Images in astronomy often, but not always, represent the intensity of some source. However, the colour schemes used to display images are not perceived as increasing monotonically in brightness, which does not aid the interpretation of the images. The perceived brightness of red, green and blue are not the same, with green being seen as the brightest, then red, then blue. For example a bright yellow (i.e. full intensity red and green) is perceived as being very much brighter than a bright blue. So if a colour scheme has yellow for intermediate intensities, but blue or red for higher intensities, then the blue or red is perceived at lower brightness. This can be also seen when such colour images are printed in black and white, when increasing intensity in the image does not correspond to a greyscale with monotonically increasing brightness.”
+
+Unlike other methods of generating perceptually uniform colours, cubehelix isn’t a special, unique colour space. It’s based on RGB: red, green, and blue colour components. To generate a palette, we plot a _helix_, a spiral, along and around the diagonal of the RGB _cube_ (it’s namesake). That diagonal is our overall lightness — a colourless scale of shades of grey, from black to white. The overall lightness increases, as we sample colours, from darkest to lightest, along our constructed spiral. And as we rotate in the RGB cube along the spiral, we rotate in a plane that’s been adjusted for the perceptual brightness of the individual RGB components. So our spiral isn’t symmetrical. It bows and rises depending on the hue.
+
+There are a few things we can control about the palette. We can set the saturation of the colours by increasing the amplitude of the helix — its deviation from the diagonal of the cube, set the range of the palette by specifying how many times to rotate around the diagonal, and set the first colour of the palette with the initial directions of the helix.
 
 
 ## Do we need the helix?
 
-Alright, so we can generate palettes of colours with monotonically increasing brightness. Our data visualisations now not only look good, but also accurately convey information. But can we do better? I mean, the helix is a fun concept and convenient for generating rainbow palettes, but it lacks precise control over the palette. Want a palette between specifics shade of blue and red? Well, good luck fiddling around with the parameters of the spiral until you get something “close enough”.
+All right, so we can generate palettes of colours with monotonically increasing brightness. Our data visualisations now not only look good, but also accurately convey information. But can we do better? I mean, the helix is a fun concept and it’s convenient for generating rainbow unicorn palettes, but it lacks precise control over the palette. Want a palette between two specific shades of blue and red? Well, good luck fiddling around with the parameters of the spiral until you, hopefully, get something “close enough”.
 
-Wouldn’t it be nice to be able to interpolate between two specific colours, while maintaining the same perceived intensity? We already know how to adjust our red, green, and blue colour components to adjust for our perception of each component’s intensity. But the original algorithm only allows us to convert locations on a helix to RGB components. Can we somehow convert RGB colours back into this perceptually uniform colour space and make use of it’s beneficial properties?
+Wouldn’t it be nice to be able to interpolate between two specific colours, while maintaining the same perceived intensity? We already know how to adjust our red, green, and blue colour components to account for our perception of each component’s intensity. But the original algorithm only allows us to convert locations on a helix to RGB components. Can we somehow convert RGB colours back into this perceptually uniform colour space and make use of it’s beneficial properties?
 
 
 ## Converting RGB values into the cubehelix space
 
-The first people to have had this idea and provide an implementation were Jason Davies and Mike Bostock, as part the d3 visualisation library back in 2015. While the code is open-source LINK, it can be difficult to follow for the uninitiated, and — as far as I know — there is no write up of the mathematics employed in the solution.
+The first people to have had this idea and provide an implementation were Jason Davies and Mike Bostock, as part the d3 visualisation library back in 2015<!--  [@d3color] -->. While the code is open-source, it can be difficult to follow for the uninitiated, and — as far as I know — there is no write up of the mathematics employed in the solution.
+
 
 ```javascript
 function cubehelixConvert(o) {
@@ -58,7 +71,8 @@ function cubehelixConvert(o) {
 
 To really understand what’s going on, we’re going to derive the solution from scratch. We’ll need a tiny bit of linear algebra, and the rest will be some basic geometry and algebra.
 
-- Convert RGB to HSL.
+
+<!-- - Convert RGB to HSL. -->
 
 
 ### Lightness
@@ -89,9 +103,9 @@ You might have noticed that the code looks a bit different. Bostock and Davies a
 
 Here’s where things seem a bit confusing at first. At first glance, \texttt{s} and \texttt{h} probably stand for “saturation” and “hue”. But what are \texttt{bl} and \texttt{k}? How do they relate to saturation and hue?
 
-We’ve got several clues. The saturation is computed from the square root of the sum of squares of \texttt{bl} and \texttt{k}. This is the Pythagorean theorem! And the hue — that’s the angle from the positive $x$ axis. So \texttt{bl} and \texttt{k} are the $x$ and $y$ values in a Euclidean plane, respectively. What is this plane though?
+We’ve got several clues. The saturation is computed from the square root of the sum of squares of \texttt{bl} and \texttt{k}. Hold on, that’s the Pythagorean theorem! And the hue — that’s the angle from the positive $x$ axis. So \texttt{bl} and \texttt{k} are the $x$ and $y$ values in a Euclidean plane, respectively. What is this plane though?
 
-- Describe projection.
+<!-- TODO: Describe projection. -->
 
 Let’s recall the original RGB transformation.
 
@@ -138,7 +152,7 @@ y &= \frac{ \frac{1}{E} \left( E (g - l) - C (b - l) \right) }{ \tilde{\alpha} D
 y &= \frac{ E (g - l) - C (b - l) }{ E \tilde{\alpha} D } \label{y}
 \end{align}
 
-Fantastic! We’ve got our $x$ and $y$ coordinates. There’s one more clever thing we can do, though. Do you see how in the equations for both $x$ \eqref{x} and $y$ \eqref{y} we’re dividing by $E \tilde{\alpha}$? We can delay that division and work with scaled $x$ and $y$ values, as long as we remember to adjust for it later.
+Fantastic! We’ve got our $x$ and $y$ coordinates. There’s one more clever thing we can do, though. Do you see how in the equations for both $x$ \eqref{x} and $y$ \eqref{y} we’re dividing by $E \tilde{\alpha}$? We can delay that division and work with scaled $x$ and $y$ values, as long as we remember to adjust for it later. Division is an expensive operation for computers to perform, after all.
 
 That way we define $\hat{x}$ and $\hat{y}$ as:
 
@@ -159,7 +173,7 @@ s &= \frac{ \sqrt{ \hat{x}^2 + \hat{y}^2 } }{ E \tilde{\alpha} }
 
 Lastly, we can compute the hue using the two-argument inverse tangent function, remembering to convert from radians to degrees,
 
-- EXPLAIN ATAN2
+<!-- TODO: explain atan2? -->
 
 \begin{align}
 h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180° }{ \pi }
@@ -186,5 +200,5 @@ EXAMPLES
 
 ## Should I use it?
 
-At this point, there’s nothing “cube” or “helix” about this colour space; it’s a cylindrical HSL colour space that can be converted to “adjusted” RGB values. People have created many such “adjusted” colour spaces over the years<!-- EXAMPLES -->, some focused on how humans perceive colours, others correcting for the pecularities of various display technologies. Each has its own set of pros and cons. This colour space tries to adjust the RGB components to create a uniform, even perception of colour intensity — either always increasing, always decreasing, or staying the same across all hues. That’s the pro. The con is that you might create impossible or unrepresentable colours: colours with a saturation or lightness outside of the range that these values can realistically take. In that case, the RGB colour components will be clipped — adjusted to the closest maximum value —, limiting the range of colours you can use while still maintaining perceptual uniformity.
+At this point, there’s nothing “cube” or “helix” about this colour space; it’s a cylindrical HSL colour space that can be converted to “adjusted” RGB values. People have created many such “adjusted” colour spaces over the years<!-- EXAMPLES -->, some focused on how humans perceive colours, others correcting for the peculiarities of various display technologies. Each has its own set of pros and cons. This colour space tries to adjust the RGB components to create a uniform, even perception of colour intensity — either always increasing, always decreasing, or staying the same across all hues. That’s the pro. The con is that you might create impossible or unrepresentable colours: colours with a saturation or lightness outside of the range that these values can realistically take. In that case, the RGB colour components will be clipped — adjusted to the closest maximum value —, limiting the range of colours you can use while still maintaining perceptual uniformity.
 
