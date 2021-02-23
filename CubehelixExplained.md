@@ -31,9 +31,9 @@ Why do this in the first place?
 
 ## Do we need the helix?
 
-Alright, so we can generate palettes of colors with monotonically increasing brightness — perfect for data visualisation. But can we do better? I mean, the helix is a fun concept and convenient for generating rainbow palettes, but it lacks precise control over the palette. Want a palette between a specific shade of blue and red? Well, good luck fiddling around with the parameters of the spiral until you get something “close enough”.
+Alright, so we can generate palettes of colours with monotonically increasing brightness. Our data visualisations now not only look good, but also accurately convey information. But can we do better? I mean, the helix is a fun concept and convenient for generating rainbow palettes, but it lacks precise control over the palette. Want a palette between specifics shade of blue and red? Well, good luck fiddling around with the parameters of the spiral until you get something “close enough”.
 
-Wouldn’t it be nice to be able to interpolate between two specific colors, while maintaining the same perceived intensity? We already know how to adjust our red, green, and blue color components to adjust for our perception of each component’s intensity. But the original algorithm only allows us to convert locations on a helix to RGB components. Can we somehow convert RGB colors back into this perceptualy uniform color space and make use of it’s beneficial properties?
+Wouldn’t it be nice to be able to interpolate between two specific colours, while maintaining the same perceived intensity? We already know how to adjust our red, green, and blue colour components to adjust for our perception of each component’s intensity. But the original algorithm only allows us to convert locations on a helix to RGB components. Can we somehow convert RGB colours back into this perceptually uniform colour space and make use of it’s beneficial properties?
 
 
 ## Converting RGB values into the cubehelix space
@@ -63,8 +63,8 @@ To really understand what’s going on, we’re going to derive the solution fro
 
 ### Lightness
 
-- Lightness — overall brightness of the colors.
-- The RGB cube, the diagonal, colorless, overall brightness.
+- Lightness — overall brightness of the colours.
+- The RGB cube, the diagonal, colourless, overall brightness.
 - R, G, and B are three orthogonal vectors. The normal vector to the three is the diagonal.
 
 Cross product of two vectors
@@ -168,7 +168,7 @@ h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180° }{ \pi }
 
 ### Spinning the hue
 
-Once last thing! Remember how our $x$ value \eqref{x} was calculated solely from the blue component of our color? Well, that means that we’ve rotated our coordinate space. Typical hue values are set to $0°$ at red, $120°$ at green, and $240°$ at blue. At $0°$, our hue is actually blue. So we’ve rotated everything by $120°$ counter-clockwise, adding $120°$ to our hue value.
+Once last thing! Remember how our $x$ value \eqref{x} was calculated solely from the blue component of our colour? Well, that means that we’ve rotated our coordinate space. Typical hue values are set to $0°$ at red, $120°$ at green, and $240°$ at blue. At $0°$, our hue is actually blue. So we’ve rotated everything by $120°$ counter-clockwise, adding $120°$ to our hue value.
 
 Luckily, there’s a simple fix! We’ll just subtract $120°$ from our final hue, and then, when converting back to RGB, make sure to add it back.
 
@@ -177,7 +177,14 @@ h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180 }{ \pi } - 120°
 \end{align}
 
 
+<!--
 ## Showing off
 
-At this point, there’s nothing “cube” or “helix” about this color space; it’s a cylindrical HSL color space that can be converted to “adjusted” RGB values. People have created many such “adjusted” color spaces over the years EXAMPLES, some focused on how humans perceive colors, others correcting for the pecularities of various display technologies. Each has its own set of pros and cons. This color space tries to adjust the RGB components to create a uniform, even perception of color intensity — either always increasing, always decreasing, or staying the same across all hues. That’s the pro. The con is that you might create impossible or unrepresentable colors: colors with a saturation or lightness outside of the range that these values can realistically take. In that case, the RGB color components will be clipped — adjusted to the closest maximum value —, limiting the range of colors you can use while still maintaining perceptual uniformity.
+EXAMPLES
+-->
+
+
+## Should I use it?
+
+At this point, there’s nothing “cube” or “helix” about this colour space; it’s a cylindrical HSL colour space that can be converted to “adjusted” RGB values. People have created many such “adjusted” colour spaces over the years<!-- EXAMPLES -->, some focused on how humans perceive colours, others correcting for the pecularities of various display technologies. Each has its own set of pros and cons. This colour space tries to adjust the RGB components to create a uniform, even perception of colour intensity — either always increasing, always decreasing, or staying the same across all hues. That’s the pro. The con is that you might create impossible or unrepresentable colours: colours with a saturation or lightness outside of the range that these values can realistically take. In that case, the RGB colour components will be clipped — adjusted to the closest maximum value —, limiting the range of colours you can use while still maintaining perceptual uniformity.
 
