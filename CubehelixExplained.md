@@ -48,7 +48,7 @@ All right, so we can generate palettes of colours with monotonically increasing 
 Wouldn’t it be nice to be able to interpolate between two specific colours, while maintaining the same perceived intensity? We already know how to adjust our red, green, and blue colour components to account for our perception of each component’s intensity. But the original algorithm only allows us to convert locations on a helix to RGB components. Can we somehow convert RGB colours back into this perceptually uniform colour space and make use of it’s beneficial properties?
 
 
-## Converting RGB values into the cubehelix space
+## Towards a cubehelix colour space
 
 The first people to have had this idea and provide an implementation were Jason Davies and Mike Bostock, as part the d3 visualisation library back in 2015<!--  [@d3color] -->. While the code is open-source, it can be difficult to follow for the uninitiated, and — as far as I know — there is no write up of the mathematics employed in the solution.
 
