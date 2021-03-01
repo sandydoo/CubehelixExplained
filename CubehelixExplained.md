@@ -219,3 +219,59 @@ EXAMPLES
 
 At this point, there’s nothing “cube” or “helix” about this colour space; it’s a cylindrical HSL colour space that can be converted to “adjusted” RGB values. People have created many such “adjusted” colour spaces over the years<!-- EXAMPLES -->, some focused on how humans perceive colours, others correcting for the peculiarities of various display technologies. Each has its own set of pros and cons. This colour space tries to adjust the RGB components to create a uniform, even perception of colour intensity — either always increasing, always decreasing, or staying the same across all hues. That’s the pro. The con is that you might create impossible or unrepresentable colours: colours with a saturation or lightness outside of the range that these values can realistically take. In that case, the RGB colour components will be clipped — adjusted to the closest maximum value —, limiting the range of colours you can use while still maintaining perceptual uniformity.
 
+
+## A general solution
+
+Our final colour space conversion took advantage of the fact that, for the cubehelix transformation, the constant $F$ is equal to 0. That simplified things for us, but we can also derive a more general solution, for any $F$. Perhaps, someone may find this useful.
+
+Let’s start with our set of red, green, and blue colour components. We’ll solve this system of equations for $x$ and $y$ using elimination.
+
+$$
+\begin{aligned}
+r &= l + \tilde{\alpha} \left( A x + B y \right) \\
+g &= l + \tilde{\alpha} \left( C x + D y \right) \\
+b &= l + \tilde{\alpha} \left( E x + F y \right)
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+D r &= D l + \tilde{\alpha} \left( A D x + B D y \right) \\
+B g &= B l + \tilde{\alpha} \left( B C x + B D y \right)
+\end{aligned}
+$$
+
+$$
+D r - B g = D l - B l + \tilde{\alpha} A D x - \tilde{\alpha} B C x \\
+$$
+
+$$
+x = \frac{ D \left( r - l \right) - B \left( g - l \right) }{ \tilde{\alpha} \left( AD - BC \right) }
+$$
+
+$$
+\begin{aligned}
+E g &= E l + \tilde{\alpha} \left( C E x + D E y \right) \\
+C b &= C l + \tilde{\alpha} \left( C E x + C F y \right)
+\end{aligned}
+$$
+
+$$
+E g - C b = E l - C l + \tilde{\alpha} D E y - \tilde{\alpha} C F y \\
+$$
+
+$$
+y = \frac{ E \left( g - l \right) - C \left( b - l \right) }{ \tilde{\alpha} \left( DE - CF \right) }
+$$
+
+Finally, we have,
+
+$$
+\begin{aligned}
+x &= \frac{ D \left( r - l \right) - B \left( g - l \right) }{ \tilde{\alpha} \left( AD - BC \right) } \\
+y &= \frac{ E \left( g - l \right) - C \left( b - l \right) }{ \tilde{\alpha} \left( DE - CF \right) } \\
+h &= arctan2 \left( y, x \right) \cdot \frac{ 180° }{ \pi } \\
+s &= \sqrt{ x^2 + y^2 } \\
+l &= \frac{ \left( CF - DE \right) r + \left( EB - AF \right) g + \left( AD - BC \right) b }{ CF - DE + EB - AF + AD - BC }
+\end{aligned}
+$$
