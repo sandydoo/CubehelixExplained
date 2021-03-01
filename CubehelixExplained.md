@@ -83,18 +83,21 @@ To really understand what’s going on, we’re going to derive the solution fro
 
 Cross product of two vectors
 
-\begin{align}
+$$
+\begin{aligned}
 \vec{X} &= Ar + Cg + Eb \\
 \vec{Y} &= Br + Dg + Fb \\
 l &= \vec{X} \times \vec{Y } \\
 l &= \frac{(CF - DE)r + (EB - AF)g + (AD - BC)b}{CF - DE + EB - AF + AD - BC}
-\end{align}
+\end{aligned}
+$$
+
 
 Since, in this case, $F = 0$, we can simplify things further.
 
-\begin{align}
-l &= \frac{(AD - BC)b - DEr + EBg}{AD - BC - DE + EB}
-\end{align}
+$$
+l = \frac{(AD - BC)b - DEr + EBg}{AD - BC - DE + EB}
+$$
 
 You might have noticed that the code looks a bit different. Bostock and Davies are computing $\vec{Y} \times \vec{X}$ instead. Why? I’m not sure. But the cross product is anti-commutative, meaning that changing the order of the two vectors in the cross product doesn’t change the result, apart from changing the sign. And since we’re normalising the whole thing, the final lightness will always be positive. So, either way is fine.
 
@@ -109,75 +112,89 @@ We’ve got several clues. The saturation is computed from the square root of th
 
 Let’s recall the original RGB transformation.
 
-\begin{align}
+$$
+\begin{aligned}
 r &= l + \alpha \left( A \cos(h) + B \sin(h) \right) \\
 g &= l + \alpha \left( C \cos(h) + D \sin(h) \right) \\
 b &= l + \alpha \left( E \cos(h) \right)
-\end{align}
+\end{aligned}
+$$
 
 where $\alpha = s \cdot l \cdot (1 - l)$.
 
 Remember what the definitions of $\cos(h)$ and $\sin(h)$ are?
 Our adjacent and opposite sides are $x$ and $y$, respectively, and the hypotenuse is the saturation $s$.
 
-\begin{align}
+$$
+\begin{aligned}
 \cos(h) &= \frac{x}{s} \\
 \sin(h) &= \frac{y}{s}
-\end{align}
+\end{aligned}
+$$
 
 Let’s plug these values in,
 
-\begin{align}
+```{=latex}
+\[\begin{subequations}
+\begin{aligned}
 r &= l + \left( \cancel{s} \cdot l \cdot (1 - l) \right) \cdot \left(A \frac{x}{\cancel{s}} + B \frac{y}{\cancel{s}} \right) \\
-g &= l + \left( \cancel{s} \cdot l \cdot (1 - l) \right) \cdot \left(C \frac{x}{\cancel{s}} + D \frac{y}{\cancel{s}} \right) \label{green} \\
+g &= l + \left( \cancel{s} \cdot l \cdot (1 - l) \right) \cdot \left(C \frac{x}{\cancel{s}} + D \frac{y}{\cancel{s}} \right) \\
 b &= l + \left( \cancel{s} \cdot l \cdot (1 - l) \right) \cdot \left(E \frac{x}{\cancel{s}} \right) \label{blue}
-\end{align}
+\end{aligned}
+\end{subequations}\]
+```
 
 We get quite lucky here. Not only do all the $s$ cancel out, meaning we have one less unknown in our set of equations, but, since $F = 0$, we can immediately rearrange equation \eqref{blue} to get $x$.
 
-\begin{align} \label{x}
-x &= \frac{b - l}{E \tilde{\alpha}}
-\end{align}
+(@x) $$
+x = \frac{b - l}{E \tilde{\alpha}}
+$$
 
 where $\tilde{\alpha} = l \cdot ( 1 - l )$.
 
 Now, for the $y$, we replace $x$ with this definition in equation \eqref{green}.
 
-\begin{align}
+$$
+\begin{aligned}
 g &= l + \tilde{\alpha} \cdot \left( \frac{C}{E \tilde{\alpha}}(b - l) + Dy \right) \\
-g &= l + \cancel{\tilde{\alpha}} \cdot \left( \frac{C}{\cancel{\tilde{\alpha}} E}(b - l) + Dy \right) \\
-g &= l + \frac{C}{E}\left( b - l \right) + \tilde{\alpha} D y \\
+  &= l + \frac{C}{E}\left( b - l \right) + \tilde{\alpha} D y \\
+\\
 y &= \frac{g - l - \frac{C}{E} \left(b - l \right)}{\tilde{\alpha} D} \\
-y &= \frac{ \frac{1}{E} \left( E (g - l) - C (b - l) \right) }{ \tilde{\alpha} D } \\
-y &= \frac{ E (g - l) - C (b - l) }{ E \tilde{\alpha} D } \label{y}
-\end{align}
+  &= \frac{ \frac{1}{E} \left( E (g - l) - C (b - l) \right) }{ \tilde{\alpha} D } \\
+  &= \frac{ E (g - l) - C (b - l) }{ E \tilde{\alpha} D } \label{y}
+\end{aligned}
+$$
 
 Fantastic! We’ve got our $x$ and $y$ coordinates. There’s one more clever thing we can do, though. Do you see how in the equations for both $x$ \eqref{x} and $y$ \eqref{y} we’re dividing by $E \tilde{\alpha}$? We can delay that division and work with scaled $x$ and $y$ values, as long as we remember to adjust for it later. Division is an expensive operation for computers to perform, after all.
 
 That way we define $\hat{x}$ and $\hat{y}$ as:
 
-\begin{align}
+$$
+\begin{aligned}
 \hat{x} &= E \tilde{\alpha} x = b - l \\
 \hat{y} &= E \tilde{\alpha} y = \frac{ E (g - l) - C (b - l) }{ D }
-\end{align}
+\end{aligned}
+$$
 
 Now our definition for $\hat{x}$ matches \texttt{bl} and $\hat{y}$ matches \texttt{k}.
 
 Saturation in our HSL space is the distance from $(0, 0)$ to $(x, y)$. Using Pythagoras’s theorem,
 
-\begin{align}
+$$
+\begin{aligned}
 s &= \sqrt{ x^2 + y^2 } \\
-s &= \sqrt{ \left( \frac{ \hat{x} }{ E \tilde{\alpha} } \right)^2 + \left( \frac{ \hat{y} }{ E \tilde{\alpha} } \right)^2 } \\
-s &= \frac{ \sqrt{ \hat{x}^2 + \hat{y}^2 } }{ E \tilde{\alpha} }
-\end{align}
+  &= \sqrt{ \left( \frac{ \hat{x} }{ E \tilde{\alpha} } \right)^2 + \left( \frac{ \hat{y} }{ E \tilde{\alpha} } \right)^2 } \\
+  &= \frac{ \sqrt{ \hat{x}^2 + \hat{y}^2 } }{ E \tilde{\alpha} }
+\end{aligned}
+$$
 
 Lastly, we can compute the hue using the two-argument inverse tangent function, remembering to convert from radians to degrees,
 
 <!-- TODO: explain atan2? -->
 
-\begin{align}
-h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180° }{ \pi }
-\end{align}
+$$
+h = arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180° }{ \pi }
+$$
 
 
 ### Spinning the hue
@@ -186,9 +203,9 @@ Once last thing! Remember how our $x$ value \eqref{x} was calculated solely from
 
 Luckily, there’s a simple fix! We’ll just subtract $120°$ from our final hue, and then, when converting back to RGB, make sure to add it back.
 
-\begin{align}
-h &= arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180 }{ \pi } - 120°
-\end{align}
+$$
+h = arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180 }{ \pi } - 120°
+$$
 
 
 <!--
