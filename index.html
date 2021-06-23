@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Sander Melnikov hey@sandydoo.me" />
+  <title>Cubehelix Explained</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Cubehelix Explained</h1>
+<p class="author">Sander Melnikov <a href="mailto:hey@sandydoo.me" class="email">hey@sandydoo.me</a></p>
+</header>
+<nav id="TOC" role="doc-toc">
+
+</nav>
+<h1 style="color: red; text-align: center;">This is a draft.</h1>
+<!--
+## Motivation
+
+What is it?
+Why do this in the first place?
+
+## Creating a palette
+
+- Describe algorithm.
+- Show the helix in 3d space and the resulting palettes.
+- Describe plane, using vectors from original paper.
+- Show how d3’s implementation is brighter because of the 2x adjustment.
+-->
+<h2 id="introduction">Introduction</h2>
+<p>Cubehelix is a method of generating palettes of colours with a very important property — a monotonically, or constantly increasing perceived brightness. The main use-case for such palettes is in data visualisation, where it’s common to represent ranges of numbers as ordered ranges of colours. But creating colourful palettes — not just greyscale — that actually look ordered turns out to be more difficult than simply increasing the overall lightness. I’ll let Dave A. Green, the original author of the cubehelix scheme, explain the issue in detail:</p>
+<blockquote>
+<p>Images in astronomy often, but not always, represent the intensity of some source. However, the colour schemes used to display images are not perceived as increasing monotonically in brightness, which does not aid the interpretation of the images. The perceived brightness of red, green and blue are not the same, with green being seen as the brightest, then red, then blue. For example a bright yellow (i.e. full intensity red and green) is perceived as being very much brighter than a bright blue. So if a colour scheme has yellow for intermediate intensities, but blue or red for higher intensities, then the blue or red is perceived at lower brightness. This can be also seen when such colour images are printed in black and white, when increasing intensity in the image does not correspond to a greyscale with monotonically increasing brightness.</p>
+</blockquote>
+<p>Unlike other methods of generating perceptually uniform colours, cubehelix isn’t a special, unique colour space. It’s based on RGB: red, green, and blue colour components. To generate a palette, we plot a <em>helix</em>, a spiral, along and around the diagonal of the RGB <em>cube</em> (it’s namesake). That diagonal is our overall lightness — a colourless scale of shades of grey, from black to white. The overall lightness increases, as we sample colours, from darkest to lightest, along our constructed spiral. And as we rotate in the RGB cube along the spiral, we rotate in a plane that’s been adjusted for the perceptual brightness of the individual RGB components. So our spiral isn’t symmetrical. It bows and rises depending on the hue.</p>
+<p>There are a few things we can control about the palette. We can set the saturation of the colours by increasing the amplitude of the helix — its deviation from the diagonal of the cube, set the range of the palette by specifying how many times to rotate around the diagonal, and set the first colour of the palette with the initial directions of the helix.</p>
+<h2 id="do-we-need-the-helix">Do we need the helix?</h2>
+<p>All right, so we can generate palettes of colours with monotonically increasing brightness. Our data visualisations now not only look good, but also accurately convey information. But can we do better? I mean, the helix is a fun concept and it’s convenient for generating rainbow unicorn palettes, but it lacks precise control over the palette. Want a palette between two specific shades of blue and red? Well, good luck fiddling around with the parameters of the spiral until you, hopefully, get something “close enough”.</p>
+<p>Wouldn’t it be nice to be able to interpolate between two specific colours, while maintaining the same perceived intensity? We already know how to adjust our red, green, and blue colour components to account for our perception of each component’s intensity. But the original algorithm only allows us to convert locations on a helix to RGB components. Can we somehow convert RGB colours back into this perceptually uniform colour space and make use of it’s beneficial properties?</p>
+<h2 id="towards-a-cubehelix-colour-space">Towards a cubehelix colour space</h2>
+<p>The first people to have had this idea and provide an implementation were Jason Davies and Mike Bostock, as part the d3 visualisation library back in 2015<!--  [@d3color] -->. While the code is open-source, it can be difficult to follow for the uninitiated, and — as far as I know — there is no write up of the mathematics employed in the solution.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">cubehelixConvert</span>(o) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (o <span class="kw">instanceof</span> Cubehelix) <span class="cf">return</span> <span class="kw">new</span> <span class="fu">Cubehelix</span>(o<span class="op">.</span><span class="at">h</span><span class="op">,</span> o<span class="op">.</span><span class="at">s</span><span class="op">,</span> o<span class="op">.</span><span class="at">l</span><span class="op">,</span> o<span class="op">.</span><span class="at">opacity</span>)<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>(o <span class="kw">instanceof</span> Rgb)) o <span class="op">=</span> <span class="fu">rgbConvert</span>(o)<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> r <span class="op">=</span> o<span class="op">.</span><span class="at">r</span> <span class="op">/</span> <span class="dv">255</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      g <span class="op">=</span> o<span class="op">.</span><span class="at">g</span> <span class="op">/</span> <span class="dv">255</span><span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      b <span class="op">=</span> o<span class="op">.</span><span class="at">b</span> <span class="op">/</span> <span class="dv">255</span><span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      l <span class="op">=</span> (BC_DA <span class="op">*</span> b <span class="op">+</span> ED <span class="op">*</span> r <span class="op">-</span> EB <span class="op">*</span> g) <span class="op">/</span> (BC_DA <span class="op">+</span> ED <span class="op">-</span> EB)<span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      bl <span class="op">=</span> b <span class="op">-</span> l<span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      k <span class="op">=</span> (<span class="cn">E</span> <span class="op">*</span> (g <span class="op">-</span> l) <span class="op">-</span> C <span class="op">*</span> bl) <span class="op">/</span> D<span class="op">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      s <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(k <span class="op">*</span> k <span class="op">+</span> bl <span class="op">*</span> bl) <span class="op">/</span> (<span class="cn">E</span> <span class="op">*</span> l <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> l))<span class="op">,</span> <span class="co">// NaN if l=0 or l=1</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      h <span class="op">=</span> s <span class="op">?</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">atan2</span>(k<span class="op">,</span> bl) <span class="op">*</span> degrees <span class="op">-</span> <span class="dv">120</span> <span class="op">:</span> <span class="kw">NaN</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="fu">Cubehelix</span>(h <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> h <span class="op">+</span> <span class="dv">360</span> <span class="op">:</span> h<span class="op">,</span> s<span class="op">,</span> l<span class="op">,</span> o<span class="op">.</span><span class="at">opacity</span>)<span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>To really understand what’s going on, we’re going to derive the solution from scratch. We’ll need a tiny bit of linear algebra, and the rest will be some basic geometry and algebra.</p>
+<!-- - Convert RGB to HSL. -->
+<h3 id="lightness">Lightness</h3>
+<ul>
+<li>Lightness — overall brightness of the colours.</li>
+<li>The RGB cube, the diagonal, colourless, overall brightness.</li>
+<li>R, G, and B are three orthogonal vectors. The normal vector to the three is the diagonal.</li>
+</ul>
+<p>Cross product of two vectors</p>
+<p><span class="math display">\[
+\begin{aligned}
+\vec{X} &amp;= Ar + Cg + Eb \\
+\vec{Y} &amp;= Br + Dg + Fb \\
+l &amp;= \vec{X} \times \vec{Y } \\
+l &amp;= \frac{(CF - DE)r + (EB - AF)g + (AD - BC)b}{CF - DE + EB - AF + AD - BC}
+\end{aligned}
+\]</span></p>
+<p>Since, in this case, <span class="math inline">\(F = 0\)</span>, we can simplify things further.</p>
+<p><span class="math display">\[
+l = \frac{(AD - BC)b - DEr + EBg}{AD - BC - DE + EB}
+\]</span></p>
+<p>You might have noticed that the code looks a bit different. Bostock and Davies are computing <span class="math inline">\(\vec{Y} \times \vec{X}\)</span> instead. Why? I’m not sure. But the cross product is anti-commutative, meaning that changing the order of the two vectors in the cross product doesn’t change the result, apart from changing the sign. And since we’re normalising the whole thing, the final lightness will always be positive. So, either way is fine.</p>
+<h3 id="hue-and-saturation">Hue and Saturation</h3>
+<p>Here’s where things seem a bit confusing at first. At first glance, <code>s</code> and <code>h</code> probably stand for “saturation” and “hue”. But what are <code>bl</code> and <code>k</code>? How do they relate to saturation and hue?</p>
+<p>We’ve got several clues. The saturation is computed from the square root of the sum of squares of <code>bl</code> and <code>k</code>. Hold on, that’s the Pythagorean theorem! And the hue — that’s the angle from the positive <span class="math inline">\(x\)</span> axis. So <code>bl</code> and <code>k</code> are the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values in a Euclidean plane, respectively. What is this plane though?</p>
+<!-- TODO: Describe projection. -->
+<p>Let’s recall the original RGB transformation.</p>
+<p><span class="math display">\[
+\begin{aligned}
+r &amp;= l + \alpha \left( A \cos(h) + B \sin(h) \right) \\
+g &amp;= l + \alpha \left( C \cos(h) + D \sin(h) \right) \\
+b &amp;= l + \alpha \left( E \cos(h) \right)
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\alpha = s \cdot l \cdot (1 - l)\)</span>.</p>
+<p>Remember what the definitions of <span class="math inline">\(\cos(h)\)</span> and <span class="math inline">\(\sin(h)\)</span> are? Our adjacent and opposite sides are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, respectively, and the hypotenuse is the saturation <span class="math inline">\(s\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\cos(h) &amp;= \frac{x}{s} \\
+\sin(h) &amp;= \frac{y}{s}
+\end{aligned}
+\]</span></p>
+<p>Let’s plug these values in,</p>
+<p>We get quite lucky here. Not only do all the <span class="math inline">\(s\)</span> cancel out, meaning we have one less unknown in our set of equations, but, since <span class="math inline">\(F = 0\)</span>, we can immediately rearrange equation  to get <span class="math inline">\(x\)</span>.</p>
+<ol class="example" type="1">
+<li><span class="math display">\[
+x = \frac{b - l}{E \tilde{\alpha}}
+\]</span></li>
+</ol>
+<p>where <span class="math inline">\(\tilde{\alpha} = l \cdot ( 1 - l )\)</span>.</p>
+<p>Now, for the <span class="math inline">\(y\)</span>, we replace <span class="math inline">\(x\)</span> with this definition in equation .</p>
+<p><span class="math display">\[
+\begin{aligned}
+g &amp;= l + \tilde{\alpha} \cdot \left( \frac{C}{E \tilde{\alpha}}(b - l) + Dy \right) \\
+  &amp;= l + \frac{C}{E}\left( b - l \right) + \tilde{\alpha} D y \\
+\\
+y &amp;= \frac{g - l - \frac{C}{E} \left(b - l \right)}{\tilde{\alpha} D} \\
+  &amp;= \frac{ \frac{1}{E} \left( E (g - l) - C (b - l) \right) }{ \tilde{\alpha} D } \\
+  &amp;= \frac{ E (g - l) - C (b - l) }{ E \tilde{\alpha} D } \label{y}
+\end{aligned}
+\]</span></p>
+<p>Fantastic! We’ve got our <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinates. There’s one more clever thing we can do, though. Do you see how in the equations for both <span class="math inline">\(x\)</span>  and <span class="math inline">\(y\)</span>  we’re dividing by <span class="math inline">\(E \tilde{\alpha}\)</span>? We can delay that division and work with scaled <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values, as long as we remember to adjust for it later. Division is an expensive operation for computers to perform, after all.</p>
+<p>That way we define <span class="math inline">\(\hat{x}\)</span> and <span class="math inline">\(\hat{y}\)</span> as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\hat{x} &amp;= E \tilde{\alpha} x = b - l \\
+\hat{y} &amp;= E \tilde{\alpha} y = \frac{ E (g - l) - C (b - l) }{ D }
+\end{aligned}
+\]</span></p>
+<p>Now our definition for <span class="math inline">\(\hat{x}\)</span> matches <code>bl</code> and <span class="math inline">\(\hat{y}\)</span> matches <code>k</code>.</p>
+<p>Saturation in our HSL space is the distance from <span class="math inline">\((0, 0)\)</span> to <span class="math inline">\((x, y)\)</span>. Using Pythagoras’s theorem,</p>
+<p><span class="math display">\[
+\begin{aligned}
+s &amp;= \sqrt{ x^2 + y^2 } \\
+  &amp;= \sqrt{ \left( \frac{ \hat{x} }{ E \tilde{\alpha} } \right)^2 + \left( \frac{ \hat{y} }{ E \tilde{\alpha} } \right)^2 } \\
+  &amp;= \frac{ \sqrt{ \hat{x}^2 + \hat{y}^2 } }{ E \tilde{\alpha} }
+\end{aligned}
+\]</span></p>
+<p>Lastly, we can compute the hue using the two-argument inverse tangent function, remembering to convert from radians to degrees,</p>
+<!-- TODO: explain atan2? -->
+<p><span class="math display">\[
+h = arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180° }{ \pi }
+\]</span></p>
+<h3 id="spinning-the-hue">Spinning the hue</h3>
+<p>Once last thing! Remember how our <span class="math inline">\(x\)</span> value  was calculated solely from the blue component of our colour? Well, that means that we’ve rotated our coordinate space. Typical hue values are set to <span class="math inline">\(0°\)</span> at red, <span class="math inline">\(120°\)</span> at green, and <span class="math inline">\(240°\)</span> at blue. At <span class="math inline">\(0°\)</span>, our hue is actually blue. So we’ve rotated everything by <span class="math inline">\(120°\)</span> counter-clockwise, adding <span class="math inline">\(120°\)</span> to our hue value.</p>
+<p>Luckily, there’s a simple fix! We’ll just subtract <span class="math inline">\(120°\)</span> from our final hue, and then, when converting back to RGB, make sure to add it back.</p>
+<p><span class="math display">\[
+h = arctan2 \left( \hat{y}, \hat{x} \right) \cdot \frac{ 180 }{ \pi } - 120°
+\]</span></p>
+<!--
+## Showing off
+
+EXAMPLES
+-->
+<h2 id="should-i-use-it">Should I use it?</h2>
+<p>At this point, there’s nothing “cube” or “helix” about this colour space; it’s a cylindrical HSL colour space that can be converted to “adjusted” RGB values. People have created many such “adjusted” colour spaces over the years<!-- EXAMPLES -->, some focused on how humans perceive colours, others correcting for the peculiarities of various display technologies. Each has its own set of pros and cons. This colour space tries to adjust the RGB components to create a uniform, even perception of colour intensity — either always increasing, always decreasing, or staying the same across all hues. That’s the pro. The con is that you might create impossible or unrepresentable colours: colours with a saturation or lightness outside of the range that these values can realistically take. In that case, the RGB colour components will be clipped — adjusted to the closest maximum value —, limiting the range of colours you can use while still maintaining perceptual uniformity.</p>
+<h2 id="a-general-solution">A general solution</h2>
+<p>Our final colour space conversion took advantage of the fact that, for the cubehelix transformation, the constant <span class="math inline">\(F\)</span> is equal to 0. That simplified things for us, but we can also derive a more general solution, for any <span class="math inline">\(F\)</span>. Perhaps, someone may find this useful.</p>
+<p>Let’s start with our set of red, green, and blue colour components. We’ll solve this system of equations for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> using elimination.</p>
+<p><span class="math display">\[
+\begin{aligned}
+r &amp;= l + \tilde{\alpha} \left( A x + B y \right) \\
+g &amp;= l + \tilde{\alpha} \left( C x + D y \right) \\
+b &amp;= l + \tilde{\alpha} \left( E x + F y \right)
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+D r &amp;= D l + \tilde{\alpha} \left( A D x + B D y \right) \\
+B g &amp;= B l + \tilde{\alpha} \left( B C x + B D y \right)
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+D r - B g = D l - B l + \tilde{\alpha} A D x - \tilde{\alpha} B C x \\
+\]</span></p>
+<p><span class="math display">\[
+x = \frac{ D \left( r - l \right) - B \left( g - l \right) }{ \tilde{\alpha} \left( AD - BC \right) }
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+E g &amp;= E l + \tilde{\alpha} \left( C E x + D E y \right) \\
+C b &amp;= C l + \tilde{\alpha} \left( C E x + C F y \right)
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+E g - C b = E l - C l + \tilde{\alpha} D E y - \tilde{\alpha} C F y \\
+\]</span></p>
+<p><span class="math display">\[
+y = \frac{ E \left( g - l \right) - C \left( b - l \right) }{ \tilde{\alpha} \left( DE - CF \right) }
+\]</span></p>
+<p>Finally, we have,</p>
+<p><span class="math display">\[
+\begin{aligned}
+x &amp;= \frac{ D \left( r - l \right) - B \left( g - l \right) }{ \tilde{\alpha} \left( AD - BC \right) } \\
+y &amp;= \frac{ E \left( g - l \right) - C \left( b - l \right) }{ \tilde{\alpha} \left( DE - CF \right) } \\
+h &amp;= arctan2 \left( y, x \right) \cdot \frac{ 180° }{ \pi } \\
+s &amp;= \sqrt{ x^2 + y^2 } \\
+l &amp;= \frac{ \left( CF - DE \right) r + \left( EB - AF \right) g + \left( AD - BC \right) b }{ CF - DE + EB - AF + AD - BC }
+\end{aligned}
+\]</span></p>
+</body>
+</html>
