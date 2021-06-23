@@ -104,9 +104,9 @@ You might have noticed that the code looks a bit different. Bostock and Davies a
 
 ### Hue and Saturation
 
-Here’s where things seem a bit confusing at first. At first glance, \texttt{s} and \texttt{h} probably stand for “saturation” and “hue”. But what are \texttt{bl} and \texttt{k}? How do they relate to saturation and hue?
+Here’s where things seem a bit confusing at first. At first glance, `s` and `h` probably stand for “saturation” and “hue”. But what are `bl` and `k`? How do they relate to saturation and hue?
 
-We’ve got several clues. The saturation is computed from the square root of the sum of squares of \texttt{bl} and \texttt{k}. Hold on, that’s the Pythagorean theorem! And the hue — that’s the angle from the positive $x$ axis. So \texttt{bl} and \texttt{k} are the $x$ and $y$ values in a Euclidean plane, respectively. What is this plane though?
+We’ve got several clues. The saturation is computed from the square root of the sum of squares of `bl` and `k`. Hold on, that’s the Pythagorean theorem! And the hue — that’s the angle from the positive $x$ axis. So `bl` and `k` are the $x$ and $y$ values in a Euclidean plane, respectively. What is this plane though?
 
 <!-- TODO: Describe projection. -->
 
@@ -176,7 +176,7 @@ $$
 \end{aligned}
 $$
 
-Now our definition for $\hat{x}$ matches \texttt{bl} and $\hat{y}$ matches \texttt{k}.
+Now our definition for $\hat{x}$ matches `bl` and $\hat{y}$ matches `k`.
 
 Saturation in our HSL space is the distance from $(0, 0)$ to $(x, y)$. Using Pythagoras’s theorem,
 
